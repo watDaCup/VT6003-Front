@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "title": "hello article",
+        "fullText": "some text here to fillthe body"
+    },
+    {
+        "id": 2,
+        "title": "another article",
+        "fullText": "again here is sometexthere to fill"
+    },
+    {
+        "id": 3,
+        "title": "coventry university",
+        "fullText": "some news aboutcoventry university"
+    },
+    {
+        "id": 4,
+        "title": "smart campus",
+        "fullText": "smart campus is comingtoIVE"
+    }
+]
