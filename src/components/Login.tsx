@@ -2,6 +2,7 @@ import React from 'react'
 import { Form, Input, Button, Card, message, Row, Col } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from './AuthContext'
 import { api } from '../common/http-common'
@@ -86,6 +87,7 @@ const Login = () => {
             </Form.Item>
           </Form>
         </Card>
+        <Link to="/register">Register a new account</Link>
       </Col>
     </Row>
   )

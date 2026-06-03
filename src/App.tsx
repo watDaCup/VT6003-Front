@@ -11,6 +11,7 @@ import Login from './components/Login'
 import DetailFilm from './components/DetailFilm'
 import NotFound from './components/NotFound'
 import Message from './components/Message'
+import Profile from './components/Profile'
 import { useAuth } from './components/AuthContext'
 
 const { Header, Content, Footer } = Layout
@@ -32,6 +33,7 @@ const App = () => {
                 ) : (
                   <Link to="/message">Message</Link>
                 )}
+                <Link to="/profile">Profile</Link>
                 <Link
                   to="#"
                   role="button"
@@ -57,6 +59,7 @@ const App = () => {
           <Route path="/f/:id" element={<DetailFilm />} />
           <Route path="/message" element={<Message />}/>
           <Route path="*" element={<NotFound />} />
+          <Route path="/profile" element={<Profile />}/>
         </Routes>
       </Content>
       <Footer>
