@@ -1,9 +1,8 @@
-import Article from "./Articles"
+import Film from "./Film"
 const Home = () => {
     return (
         <>
-            <p>Home</p>
-            <Article />
+            <Film />
         </>
     )
 }

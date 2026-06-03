@@ -1,38 +1,61 @@
 import { Layout, Space } from 'antd'
 import './App.css'
-import { BrowserRouter as Router,
-        Routes, Route, Link
-      } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from 'react-router-dom'
 import Home from './components/Home'
 import Dashboard from './components/Dashboard'
-import About from './components/About'
 import Register from './components/Register'
 import Login from './components/Login'
-import DetailArticle from './components/DetailArticle'
+import DetailFilm from './components/DetailFilm'
 import NotFound from './components/NotFound'
+import Message from './components/Message'
+import { useAuth } from './components/AuthContext'
 
 const { Header, Content, Footer } = Layout
 
 const App = () => {
+  const { isAuthenticated, logout, user } = useAuth();
   return (
     <Router>
       <Header>
         <nav>
           <Space>
             <Link to="/">Home</Link>
-            <Link to="/dashboard">Dashboard</Link>
-            <Link to="/about">About</Link>
+            {!isAuthenticated ? (
+              <Link to="/login">Login</Link>
+            ) : (
+              <>
+                {user?.role === 'Admin' ? (
+                  <Link to="/dashboard">Dashboard</Link>
+                ) : (
+                  <Link to="/message">Message</Link>
+                )}
+                <Link
+                  to="#"
+                  role="button"
+                  onClick={(e) => {
+                    e.preventDefault() 
+                    logout()          
+                    window.location.href = '/'
+                  }}
+                >
+                  Logout
+                </Link>
+              </>
+            )}
           </Space>
         </nav>
       </Header>
       <Content>
         <Routes>
-          <Route index element={ <Home/> }/>
-          <Route path="/about" element={ <About/> }/>
-          <Route path="/dashboard" element={ <Dashboard/> }/>
-          <Route path="/register" element={ <Register/> }/>
-          <Route path="/login" element={ <Login/> }/>
-          <Route path="/a/:id" element={ <DetailArticle/> }/>
+          <Route index element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/f/:id" element={<DetailFilm />} />
+          <Route path="/message" element={<Message />}/>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Content>
