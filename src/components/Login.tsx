@@ -37,14 +37,20 @@ const Login = () => {
 
         const finalToken = serverToken || clientBackupToken;
 
-        // console.log("[DEBUG] Saving session payload to AuthContext:", {
-        //   ...nestedUserObj,
-        //   id: nestedUserObj?.id,
-        //   token: finalToken
-        // });
+        console.log("[DEBUG] Server response:", {
+          response,
+        });
+
+        console.log("[DEBUG] Saving session payload to AuthContext:", {
+          ...nestedUserObj,
+          email: nestedUserObj?.email,
+          id: nestedUserObj?.id,
+          token: finalToken
+        });
 
         login({
-          ...nestedUserObj,       
+          ...nestedUserObj,    
+          email: nestedUserObj?.email,   
           id: nestedUserObj?.id,
           token: finalToken
         })
