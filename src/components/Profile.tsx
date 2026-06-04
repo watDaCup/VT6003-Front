@@ -9,38 +9,37 @@ const Profile = () => {
   const { user, login } = useAuth()
   const [uploading, setUploading] = useState(false)
 
-  // DEBUG LOG: Track Auth Context changes dynamically
-  useEffect(() => {
-    console.log("[DEBUG - Profile Component Auth State]:", { 
-      hasUser: !!user, 
-      userId: user?.id, 
-      username: user?.username,
-      email: user?.email,
-      role: user?.role,
-      hasToken: !!user?.token,
-      hasPhoto: !!user?.profile_photo 
-    });
-  }, [user])
+//   useEffect(() => {
+//     console.log("[DEBUG - Profile Component Auth State]:", { 
+//       hasUser: !!user, 
+//       userId: user?.id, 
+//       username: user?.username,
+//       email: user?.email,
+//       role: user?.role,
+//       hasToken: !!user?.token,
+//       hasPhoto: !!user?.profile_photo 
+//     });
+//   }, [user])
 
   const getAuthHeader = () => {
     if (user && user.token) {
       const authHeader = { Authorization: `Basic ${user.token}` };
-      console.log("[DEBUG - Generated Auth Header]:", authHeader);
+    //   console.log("[DEBUG - Generated Auth Header]:", authHeader);
       return authHeader;
     }
-    console.warn("[DEBUG - getAuthHeader Warning]: Cannot build header. Token or user object is missing!", { user });
+    // console.warn("[DEBUG - getAuthHeader Warning]: Cannot build header. Token or user object is missing!", { user });
     return {}
   }
 
   const handlePhotoUpload = async (file: File) => {
-    console.log("[DEBUG - Photo Upload Triggered]: Selected file metadata:", {
-      name: file.name,
-      size: `${(file.size / 1024).toFixed(2)} KB`,
-      type: file.type
-    });
+    // console.log("[DEBUG - Photo Upload Triggered]: Selected file metadata:", {
+    //   name: file.name,
+    //   size: `${(file.size / 1024).toFixed(2)} KB`,
+    //   type: file.type
+    // });
 
     if (!user?.id) {
-      console.error("[DEBUG - Upload Blocked]: Action terminated because user.id is missing or undefined.");
+    //   console.error("[DEBUG - Upload Blocked]: Action terminated because user.id is missing or undefined.");
       message.error("User session missing.")
       return false
     }
@@ -53,10 +52,10 @@ const Profile = () => {
     reader.onload = async () => {
       try {
         const base64String = reader.result as string
-        console.log("[DEBUG - FileReader Success]: Base64 compilation complete string snippet:", base64String.substring(0, 50) + "...");
+        // console.log("[DEBUG - FileReader Success]: Base64 compilation complete string snippet:", base64String.substring(0, 50) + "...");
 
         const targetUrl = `${api.uri}/users/${user.id}/photo`;
-        console.log(`[DEBUG - Sending POST Request to]: ${targetUrl}`);
+        // console.log(`[DEBUG - Sending POST Request to]: ${targetUrl}`);
 
         const response = await axios.post(
           targetUrl,
@@ -64,11 +63,11 @@ const Profile = () => {
           { headers: getAuthHeader() }
         )
 
-        console.log("[DEBUG - Server Response received]:", {
-          status: response.status,
-          statusText: response.statusText,
-          data: response.data
-        });
+        // console.log("[DEBUG - Server Response received]:", {
+        //   status: response.status,
+        //   statusText: response.statusText,
+        //   data: response.data
+        // });
 
         if (response.status === 200) {
           message.success("Profile photo updated successfully!")
@@ -78,17 +77,17 @@ const Profile = () => {
             profile_photo: base64String
           }
           
-          console.log("[DEBUG - Updating Auth State via login()]: Syncing new profile image string to session.");
+        //   console.log("[DEBUG - Updating Auth State via login()]: Syncing new profile image string to session.");
           login(updatedUser)
         }
       } catch (error: any) {
-        console.error("[DEBUG - Photo Upload Server Error]: Full exception trace:", error);
-        if (error.response) {
-          console.error("[DEBUG - Error Response Payload from server]:", {
-            status: error.response.status,
-            data: error.response.data
-          });
-        }
+        // console.error("[DEBUG - Photo Upload Server Error]: Full exception trace:", error);
+        // if (error.response) {
+        //   console.error("[DEBUG - Error Response Payload from server]:", {
+        //     status: error.response.status,
+        //     data: error.response.data
+        //   });
+        // }
         message.error(error.response?.data?.message || "Failed to upload profile photo.")
       } finally {
         setUploading(false)
@@ -96,17 +95,16 @@ const Profile = () => {
     }
 
     reader.onerror = (error) => {
-      console.error("[DEBUG - FileReader Error]: Local compilation failed:", error);
+    //   console.error("[DEBUG - FileReader Error]: Local compilation failed:", error);
       message.error("Failed to process selected file.")
       setUploading(false)
     }
 
-    // Return false to stop Ant Design's Upload component from using its default AJAX poster
     return false
   }
 
   if (!user) {
-    console.warn("[DEBUG - Profile Render Blocked]: Rendering guest notification layout because user data context is empty.");
+    // console.warn("[DEBUG - Profile Render Blocked]: Rendering guest notification layout because user data context is empty.");
     return (
       <div style={{ textAlign: 'center', marginTop: '50px' }}>
         Please log in to view your profile settings.

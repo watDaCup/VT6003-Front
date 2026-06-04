@@ -13,6 +13,8 @@ import NotFound from './components/NotFound'
 import Message from './components/Message'
 import Profile from './components/Profile'
 import { useAuth } from './components/AuthContext'
+import FilmRequest from './components/FilmRequest'
+import DetailRequest from './components/DetailRequest'
 
 const { Header, Content, Footer } = Layout
 
@@ -24,6 +26,7 @@ const App = () => {
         <nav>
           <Space>
             <Link to="/">Home</Link>
+            <Link to="/request">Film Request</Link>
             {!isAuthenticated ? (
               <Link to="/login">Login</Link>
             ) : (
@@ -53,6 +56,7 @@ const App = () => {
       <Content>
         <Routes>
           <Route index element={<Home />} />
+          <Route path="/request" element={<FilmRequest />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
@@ -60,6 +64,7 @@ const App = () => {
           <Route path="/message" element={<Message />}/>
           <Route path="*" element={<NotFound />} />
           <Route path="/profile" element={<Profile />}/>
+          <Route path="/detail-request" element={<DetailRequest/>}/>
         </Routes>
       </Content>
       <Footer>

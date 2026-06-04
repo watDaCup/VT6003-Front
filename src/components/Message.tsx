@@ -30,9 +30,9 @@ const Message = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isRespondModalOpen, setIsRespondModalOpen] = useState<boolean>(false)
-  
+
   const [selectedMessage, setSelectedMessage] = useState<MessageItem | null>(null)
-  
+
   const [form] = Form.useForm()
   const [respondForm] = Form.useForm()
 
@@ -48,7 +48,7 @@ const Message = () => {
     setLoading(true)
     try {
       let endpoint = `${api.uri}/messages`
-      
+
       if (user.role === 'User') {
         endpoint = `${api.uri}/messages/user/${user.id}`
       }
@@ -145,23 +145,25 @@ const Message = () => {
     )
   }
 
+  const filteredMessages = messages.filter((msg) => msg.from_user_id !== 4)
+
   return (
     <div style={{ padding: '24px', maxWidth: '1000px', margin: '0 auto' }}>
-      
+
       <Row justify="space-between" align="middle" style={{ marginBottom: '24px' }}>
         <Col>
           <Space size="middle">
             <CommentOutlined style={{ fontSize: '28px' }} />
-            <Title level={2} style={{ margin: 0, color: 'white', outline: 'black' }}>
+            <Title level={2} style={{ margin: 0, color: 'white' }}>
               {user?.role === 'Admin' ? 'Administrative Feedback Moderation' : 'Support Ticket Message Board'}
             </Title>
           </Space>
         </Col>
         <Col>
           {user?.role === 'User' && (
-            <Button 
-              type="primary" 
-              icon={<PlusOutlined />} 
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
               size="large"
               onClick={() => setIsModalOpen(true)}
             >
@@ -173,18 +175,18 @@ const Message = () => {
 
       {loading ? (
         <div style={{ textAlign: 'center', padding: '40px' }}>Loading conversation history...</div>
-      ) : messages.length === 0 ? (
+      ) : filteredMessages.length === 0 ? (
         <Empty description="No message transactions registered on this account profile tier." />
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {messages.map((msg) => {
+          {filteredMessages.map((msg) => {
             const linkedFilm = films.find(f => f.id === msg.film_id)
-            
+
             return (
               <Card
                 key={msg.id}
-                style={{ 
-                  borderRadius: '8px', 
+                style={{
+                  borderRadius: '8px',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
                   borderLeft: msg.response ? '5px solid #52c41a' : '5px solid #faad14'
                 }}
@@ -200,7 +202,7 @@ const Message = () => {
                     <MessageOutlined style={{ color: '#8c8c8c' }} />
                     <Text strong style={{ color: '#262626' }}>To: System Administrator</Text>
                   </Space>
-                  
+
                   <Space>
                     {linkedFilm && (
                       <Tag color="blue">Film Reference: {linkedFilm.title}</Tag>
@@ -217,10 +219,10 @@ const Message = () => {
                   </Text>
                 </div>
 
-                <div style={{ 
-                  background: msg.response ? '#f6ffed' : '#fffbe6', 
-                  padding: '12px 16px', 
-                  borderRadius: '6px', 
+                <div style={{
+                  background: msg.response ? '#f6ffed' : '#fffbe6',
+                  padding: '12px 16px',
+                  borderRadius: '6px',
                   border: msg.response ? '1px solid #b7eb8f' : '1px solid #ffe58f',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -248,8 +250,8 @@ const Message = () => {
                   {user?.role === 'Admin' && (
                     <Space style={{ marginLeft: '16px' }}>
                       {!msg.response && (
-                        <Button 
-                          type="primary" 
+                        <Button
+                          type="primary"
                           size="small"
                           onClick={() => {
                             setSelectedMessage(msg)
@@ -259,9 +261,9 @@ const Message = () => {
                           Provide Response
                         </Button>
                       )}
-                      <Button 
-                        danger 
-                        type="text" 
+                      <Button
+                        danger
+                        type="text"
                         size="small"
                         onClick={() => handleDeleteMessage(msg.id)}
                       >
@@ -284,13 +286,9 @@ const Message = () => {
           form.resetFields()
         }}
         footer={null}
-        destroyOnClose
       >
         <Form form={form} layout="vertical" onFinish={handleCreateMessage}>
-          <Form.Item 
-            name="film_id" 
-            label="Contextual Movie Association (Optional)"
-          >
+          <Form.Item name="film_id" label="Contextual Movie Association (Optional)">
             <Select placeholder="Select a film entry to tag onto this query string" allowClear>
               {films.map(f => (
                 <Select.Option key={f.id} value={f.id}>{f.title}</Select.Option>
@@ -303,10 +301,7 @@ const Message = () => {
             label="Message Details"
             rules={[{ required: true, message: 'Please input the body details text content!' }]}
           >
-            <TextArea 
-              rows={5} 
-              placeholder="Provide information regarding your catalog data request, dispute entry corrections, or general feedback inquiries..." 
-            />
+            <TextArea rows={5} placeholder="Provide information regarding your catalog data request..." />
           </Form.Item>
 
           <Form.Item style={{ textAlign: 'right', marginBottom: 0 }}>
@@ -336,14 +331,14 @@ const Message = () => {
             <Text style={{ whiteSpace: 'pre-wrap' }}>{selectedMessage.text}</Text>
           </div>
         )}
-        
+
         <Form form={respondForm} layout="vertical" onFinish={handleAdminRespond}>
           <Form.Item
             name="response"
             label="Official Response Text"
             rules={[{ required: true, message: 'Please input the resolution details text!' }]}
           >
-            <TextArea rows={4} placeholder="Type the structural official response updates or answer information notes here..." />
+            <TextArea rows={4} placeholder="Type the structural official response updates..." />
           </Form.Item>
 
           <Form.Item style={{ textAlign: 'right', marginBottom: 0 }}>
